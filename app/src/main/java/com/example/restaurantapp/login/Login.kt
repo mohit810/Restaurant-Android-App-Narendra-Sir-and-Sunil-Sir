@@ -14,12 +14,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
-import com.example.restaurantapp.Base
 import com.example.restaurantapp.HomeActivity
 import com.example.restaurantapp.R
-import com.example.restaurantapp.RestaurantApplication
 import com.example.restaurantapp.dataprovider.dataclass.Details
 import com.example.restaurantapp.dataprovider.sharedpref.Prefs
 import com.example.restaurantapp.register.Register
@@ -28,7 +24,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

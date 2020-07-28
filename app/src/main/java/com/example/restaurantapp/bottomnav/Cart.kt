@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieDrawable
 import com.example.restaurantapp.Base
 import com.example.restaurantapp.R
 import com.example.restaurantapp.bottomnav.adapters.CartAdapter
@@ -277,12 +278,36 @@ private lateinit var cartViewModel:CartViewModel
                 //     val apiResponse = ModelAPIResponse(response.body() as LinkedTreeMap<String, String>)
                 if (response.code() == 201) {
                    Toast.makeText(context,"Check Your Order Status in Account Tab",Toast.LENGTH_LONG).show()
-                  cleanCart()
+                    successCleanCart()
                 } else {
                     Toast.makeText(context,"YO",Toast.LENGTH_LONG).show()
                     cleanCart()
                 }
 
+            }
+        })
+    }
+    private fun successCleanCart(){
+        cartViewModel.deletemutableLiveDataCartItem().observe(this, Observer {
+            if (it == null || it.isEmpty())
+            {
+                recycler_cart!!.visibility =View.GONE
+                groupplaceholder!!.visibility = View.GONE
+                txt_empty_cart!!.visibility =View.VISIBLE
+                txt_empty_cart!!.setText("your order will be delivered soon.")
+                empty_cart_animation!!.visibility =View.VISIBLE
+                empty_cart_animation!!.setAnimation(R.raw.orderplaced)
+                empty_cart_animation!!.setRepeatCount(LottieDrawable.INFINITE)
+                empty_cart_animation!!.playAnimation()
+
+            }else{
+                recycler_cart!!.visibility =View.VISIBLE
+                groupplaceholder!!.visibility = View.VISIBLE
+                txt_empty_cart!!.visibility =View.GONE
+                empty_cart_animation!!.visibility =View.GONE
+                adapter = CartAdapter(context!!,it)
+                recycler_cart!!.adapter = adapter
+                helperList = it
             }
         })
     }

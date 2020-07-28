@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Restaurant App</string>
+    <string name="app_name">SafEat</string>
 
     <string name="onboarding_slide1_subtitle">Food worth Utensil Licking</string>
     <string name="onboarding_slide1_desc">User will be able to give you live, chat and meet

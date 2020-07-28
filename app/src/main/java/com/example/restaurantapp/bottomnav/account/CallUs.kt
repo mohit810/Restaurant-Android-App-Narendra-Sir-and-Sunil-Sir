@@ -39,7 +39,7 @@ class CallUs : AppCompatActivity() {
         }
 
         CallUs_card.setOnClickListener(){
-           var phone = 9041576913
+           var phone = 9040000000
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse("tel: $phone")
             startActivity(intent)

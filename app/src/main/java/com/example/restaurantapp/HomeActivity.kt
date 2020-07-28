@@ -3,6 +3,10 @@ package com.example.restaurantapp
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
+import android.bluetooth.le.AdvertiseCallback
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -16,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.restaurantapp.beacon.AdvertiserService
+import com.example.restaurantapp.dataprovider.Constants
 import com.example.restaurantapp.dataprovider.sharedpref.Prefs
 import com.example.restaurantapp.locationwithlivedata.GpsUtils
 import com.example.restaurantapp.locationwithlivedata.LocationViewModel
@@ -30,6 +36,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var locationViewModel: LocationViewModel
     var liveaddress: String? = null
     private var isGPSEnabled = false
+    private var mBluetoothAdapter: BluetoothAdapter? = null
+    private var advertisingFailureReceiver: BroadcastReceiver? = null
     private val STORAGE_PERMISSION_CODE = 102
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +74,92 @@ class HomeActivity : AppCompatActivity() {
             val fileUri = File(mydir, "profilepic.png")
             Prefs.profilePicUri = fileUri.toString()
             startUp()
+        }
+        //new beacon addition for ns yadav sir and sunil sir
+        checkBluetooth( savedInstanceState)
+        advertisingFailureReceiver = object : BroadcastReceiver() {
+            /**
+             * Receives Advertising error codes from `AdvertiserService` and displays error messages
+             * to the user. Sets the advertising toggle to 'false.'
+             */
+            override fun onReceive(
+                context: Context,
+                intent: Intent
+            ) {
+                val errorCode =
+                    intent.getIntExtra(AdvertiserService.ADVERTISING_FAILED_EXTRA_CODE, -1)
+                var errorMessage: String = "start_error_prefix"
+                when (errorCode) {
+                    AdvertiseCallback.ADVERTISE_FAILED_ALREADY_STARTED -> errorMessage += " " + "start_error_already_started"
+
+                    AdvertiseCallback.ADVERTISE_FAILED_DATA_TOO_LARGE -> errorMessage += " " + "start_error_too_large"
+
+                    AdvertiseCallback.ADVERTISE_FAILED_FEATURE_UNSUPPORTED -> errorMessage += " " + "start_error_unsupported"
+
+                    AdvertiseCallback.ADVERTISE_FAILED_INTERNAL_ERROR -> errorMessage += " " + "start_error_internal"
+
+                    AdvertiseCallback.ADVERTISE_FAILED_TOO_MANY_ADVERTISERS -> errorMessage += " " + "start_error_too_many"
+
+                    AdvertiserService.ADVERTISING_TIMED_OUT -> errorMessage =
+                        " " + "advertising_timedout"
+                    else -> errorMessage += " " + "start_error_unknown"
+                }
+                Toast.makeText(this@HomeActivity, errorMessage, Toast.LENGTH_LONG).show()
+            }
+        }
+        startAdvertising()
+
+    }
+
+    /**
+     * Starts BLE Advertising by starting `AdvertiserService`.
+     */
+    private fun startAdvertising() {
+        val c: Context = this
+        c.startService(getAdvertisingServiceIntent(c))
+    }
+
+    companion object {
+        /**
+         * Returns Intent addressed to the `AdvertiserService` class.
+         */
+        private fun getAdvertisingServiceIntent(c: Context): Intent {
+            return Intent(c, AdvertiserService::class.java)
+        }
+    }
+
+    private fun checkBluetooth(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            mBluetoothAdapter = (getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager)
+                .adapter
+
+            // Is Bluetooth supported on this device?
+            if (mBluetoothAdapter != null) {
+
+                // Is Bluetooth turned on?
+                if (mBluetoothAdapter!!.isEnabled()) {
+
+                    // Are Bluetooth Advertisements supported on this device?
+                    if (mBluetoothAdapter!!.isMultipleAdvertisementSupported()) {
+
+                        // Everything is supported and enabled, load the fragments.
+
+                    } else {
+
+                        // Bluetooth Advertisements are not supported.
+                        Toast.makeText(this,"bluetooth not supported",Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+
+                    // Prompt user to turn on Bluetooth (logic continues in onActivityResult()).
+                    val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                    startActivityForResult(enableBtIntent, Constants.REQUEST_ENABLE_BT)
+                }
+            } else {
+
+                // Bluetooth is not supported.
+                Toast.makeText(this,"bluetooth not supported",Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -110,7 +204,7 @@ class HomeActivity : AppCompatActivity() {
     private fun invokeLocationAction() {
         when {
             isPermissionsGranted() -> startLocationUpdate()
-            else -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE), LOCATION_REQUEST
+            else -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE, Manifest.permission.BLUETOOTH, Manifest.permission.RECEIVE_BOOT_COMPLETED), LOCATION_REQUEST
             )
         }
     }

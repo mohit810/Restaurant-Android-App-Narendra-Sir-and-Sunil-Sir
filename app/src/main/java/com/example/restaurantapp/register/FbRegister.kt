@@ -257,6 +257,36 @@ class FbRegister : AppCompatActivity() {
                 .into(fbRegisterProfilePic)
             /* val profilePic:ProfilePictureView = fbimageView fb's api
              profilePic.setProfileId(uids)*/
+            Picasso.get()
+                .load(
+                    "https://graph.facebook.com/v7.0/" + uids
+                        .toString() + "/picture?height=500&type=normal"
+                ) //extract as User instance method
+                .transform(CropCircleTransformation())
+                .resize(400, 400)
+                .into(object : com.squareup.picasso.Target{
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
+                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                        try {
+                            val wrapper = ContextWrapper(applicationContext)
+                            val mydir = wrapper.getDir("images", Context.MODE_PRIVATE)
+                            if (!mydir.exists()) {
+                                mydir.mkdirs()
+                            }
+                            val fileUri = File(mydir, "profilepic.png")
+                            Prefs.profilePicUri = fileUri.toString()
+                            val outputStream = FileOutputStream(fileUri)
+                            bitmap!!.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                            outputStream.flush()
+                            outputStream.close()
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+                        Toast.makeText(applicationContext, "Image Downloaded", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                })
             GraphLoginRequest(token)
         } else {
 
