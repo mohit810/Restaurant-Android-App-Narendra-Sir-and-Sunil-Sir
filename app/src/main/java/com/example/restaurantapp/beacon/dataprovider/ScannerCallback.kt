@@ -29,10 +29,10 @@ object ScannerCallback : ScanCallback() {
             if (result == null || result.device == null || result.device.name == null)
                 return
 
-             if (result.rssi > -78) {/* use this for approximation of 1 meter*/
+//             if (result.rssi > -78) {/* use this for approximation of 1 meter*/
 
                    Constants.vibratePhone()
-                /*Toast.makeText(BLEApp.getInstance(), result.toString(), Toast.LENGTH_SHORT).show()*/
+                Toast.makeText(SafEat.getInstance(), "You are violating social distancing norm.", Toast.LENGTH_SHORT).show()
                    Log.d("yoo",result.rssi.toString())
                    var txPower: String = Constants.EMPTY
                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -47,7 +47,7 @@ object ScannerCallback : ScanCallback() {
                        result.device.toString(), result.rssi, txPower, txPowerLevel
                    )
                    storeDetectedUserDeviceInDB(bluetoothModel)
-                }
+//                }
 
         }
 

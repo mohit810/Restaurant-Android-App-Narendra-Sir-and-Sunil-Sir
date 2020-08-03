@@ -185,6 +185,7 @@
         android:background="@drawable/fb"
         android:onClick="onClickFacebookButton"
         android:textAllCaps="false"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/register_horizontal_guideline14"
         app:layout_constraintEnd_toStartOf="@+id/register_vertical_guideline7"
         app:layout_constraintStart_toStartOf="@id/register_vertical_guideline0"
@@ -199,18 +200,19 @@
         app:layout_constraintEnd_toStartOf="@+id/register_vertical_guideline3"
         app:layout_constraintStart_toStartOf="@+id/register_vertical_guideline8"
         app:layout_constraintTop_toTopOf="@+id/register_horizontal_guideline13" />
+
     <ImageButton
         android:id="@+id/google_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/googlebtn"
+        android:elevation="10dp"
         android:onClick="onClickGoogleButton"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@id/register_horizontal_guideline14"
         app:layout_constraintEnd_toStartOf="@+id/register_vertical_guideline9"
-        app:layout_constraintStart_toStartOf="@+id/register_vertical_guideline8"
-        app:layout_constraintTop_toTopOf="@+id/register_horizontal_guideline13"
-        android:elevation="10dp" />
+        app:layout_constraintStart_toEndOf="@+id/twitter_btn"
+        app:layout_constraintTop_toTopOf="@+id/register_horizontal_guideline13" />
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
         android:id="@+id/login_button"
         android:layout_width="0dp"
@@ -229,7 +231,7 @@
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@id/register_horizontal_guideline14"
         app:layout_constraintEnd_toStartOf="@+id/register_vertical_guideline8"
-        app:layout_constraintStart_toStartOf="@id/register_vertical_guideline7"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/register_horizontal_guideline13"
         android:elevation="10dp"/>
     <androidx.constraintlayout.widget.Guideline

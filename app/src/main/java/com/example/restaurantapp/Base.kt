@@ -63,10 +63,10 @@ class Base : AppCompatActivity() {
         /*countCartItem()*/
     }
 
-  /*  override fun onResume() {
+    override fun onResume() {
         super.onResume()
         countCartItem()
-    }*/
+    }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {

@@ -87,8 +87,8 @@ class Menu : Fragment() {
                 }
             }
         })
-        //animation for the fab action button
-       val fabTickCross: FloatingActionButton = fabTickCross
+        //animation for the fab action button commented as not req.
+/*       val fabTickCross: FloatingActionButton = fabTickCross
         tickToCross = getDrawable(activity!!.baseContext,R.drawable.avd_tick2cross) as AnimatedVectorDrawable
         crossToTick = getDrawable(activity!!.baseContext,R.drawable.avd_cross2tick) as AnimatedVectorDrawable
         fabTickCross.setOnClickListener(){
@@ -117,7 +117,7 @@ class Menu : Fragment() {
                     isTick = !isTick
                 }
             }
-        }
+        }*/
         registerbtn.setOnClickListener(){
             startActivity(Intent(activity!!.baseContext, Register::class.java))
         }

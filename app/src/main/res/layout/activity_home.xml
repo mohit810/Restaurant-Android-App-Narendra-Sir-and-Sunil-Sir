@@ -112,7 +112,25 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/home_vertical_guideline2"
         app:layout_constraintTop_toTopOf="@+id/home_horizontal_guideline6" />
-
+    <Switch
+        android:id="@+id/advertise_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:switchMinWidth="80dp"
+        app:layout_constraintBottom_toTopOf="@id/onboarding_activity_horizontal_guideline1"
+        app:layout_constraintEnd_toEndOf="@+id/home_vertical_guideline8"
+        app:layout_constraintStart_toEndOf="@+id/beacon_text"
+        app:layout_constraintTop_toBottomOf="@+id/home_helptxt" />
+    <TextView
+        android:id="@+id/beacon_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activate the beacon ->"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintBottom_toTopOf="@id/onboarding_activity_horizontal_guideline1"
+        app:layout_constraintEnd_toStartOf="@+id/home_vertical_guideline6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_helptxt"/>
     <Button
         android:id="@+id/home_login_btn"
         android:layout_width="0dp"

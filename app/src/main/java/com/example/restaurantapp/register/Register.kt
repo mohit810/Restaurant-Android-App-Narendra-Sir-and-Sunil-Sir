@@ -290,7 +290,7 @@ class Register : AppCompatActivity() {
 
     fun onClickFacebookButton(view: View) {
         if (view == fb_btn) {
-            buttonFacebookLogin.performClick();
+//            buttonFacebookLogin.performClick();
         }
     }
     fun twitterlogin(){

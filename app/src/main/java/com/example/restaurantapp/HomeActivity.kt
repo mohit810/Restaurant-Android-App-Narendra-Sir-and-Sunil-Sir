@@ -6,15 +6,13 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.AdvertiseCallback
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.ContextWrapper
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -29,6 +27,7 @@ import com.example.restaurantapp.login.Login
 import com.example.restaurantapp.register.Register
 import com.example.restaurantapp.starting.config.AppPrefs
 import com.example.restaurantapp.starting.view.activity.OnBoardingActivity
+import com.google.android.material.internal.ContextUtils.getActivity
 import kotlinx.android.synthetic.main.activity_home.*
 import java.io.File
 
@@ -38,7 +37,10 @@ class HomeActivity : AppCompatActivity() {
     private var isGPSEnabled = false
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private var advertisingFailureReceiver: BroadcastReceiver? = null
-    private val STORAGE_PERMISSION_CODE = 102
+    /**
+     * Lets user toggle BLE Advertising.
+     */
+    private var mSwitch: Switch? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Check if the app is launched before
@@ -107,10 +109,44 @@ class HomeActivity : AppCompatActivity() {
                 Toast.makeText(this@HomeActivity, errorMessage, Toast.LENGTH_LONG).show()
             }
         }
-        startAdvertising()
-
+        mSwitch = advertise_switch as Switch
+        /**
+         * Called when switch is toggled - starts or stops advertising.
+         */
+        mSwitch!!.setOnClickListener {v:View ->
+            // Is the toggle on?
+            val on = (v as Switch).isChecked
+            if (on) {
+                startAdvertising()
+            } else {
+                stopAdvertising()
+            }
+        }
     }
-
+    /**
+     * When app goes off screen, unregister the Advertising failure Receiver to stop memory leaks.
+     * (and because the app doesn't care if Advertising fails while the UI isn't active)
+     */
+    @SuppressLint("RestrictedApi")
+    override fun onPause() {
+        super.onPause()
+        getActivity(this)!!.unregisterReceiver(advertisingFailureReceiver)
+    }
+    /**
+     * When app comes on screen, check if BLE Advertisements are running, set switch accordingly,
+     * and register the Receiver to be notified if Advertising fails.
+     */
+    @SuppressLint("RestrictedApi")
+    override fun onResume() {
+        super.onResume()
+        if (AdvertiserService.running) {
+            mSwitch!!.isChecked = true
+        } else {
+            mSwitch!!.isChecked = false
+        }
+        val failureFilter = IntentFilter(AdvertiserService.ADVERTISING_FAILED)
+        getActivity(this)!!.registerReceiver(advertisingFailureReceiver, failureFilter)
+    }
     /**
      * Starts BLE Advertising by starting `AdvertiserService`.
      */
@@ -118,7 +154,14 @@ class HomeActivity : AppCompatActivity() {
         val c: Context = this
         c.startService(getAdvertisingServiceIntent(c))
     }
-
+    /**
+     * Stops BLE Advertising by stopping `AdvertiserService`.
+     */
+    private fun stopAdvertising() {
+        val c: Context = this
+        c.stopService(getAdvertisingServiceIntent(c))
+        mSwitch!!.isChecked = false
+    }
     companion object {
         /**
          * Returns Intent addressed to the `AdvertiserService` class.
@@ -228,6 +271,7 @@ class HomeActivity : AppCompatActivity() {
             this,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
+
 
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(

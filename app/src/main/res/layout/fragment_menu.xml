@@ -134,7 +134,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     </androidx.core.widget.NestedScrollView>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+ <!--   <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabTickCross"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -142,6 +142,6 @@
         android:layout_marginBottom="10dp"
         app:layout_anchor="@id/nest_scrollview"
         app:layout_anchorGravity="bottom|end"
-        android:src="@drawable/ic_tick" />
+        android:src="@drawable/ic_tick" />-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
