@@ -67,26 +67,33 @@ class Login : AppCompatActivity() {
         call.enqueue(object : Callback<List<Details>> {
             override fun onFailure(call: Call<List<Details>>, t: Throwable) {
                 var d= t.stackTrace
-                Toast.makeText(this@Login,d.toString() + " Sorry but Our Server is Down.",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@Login, " Sorry but Our Server is Down.",Toast.LENGTH_LONG).show()
 
             }
 
             override fun onResponse(call: Call<List<Details>>, response: Response<List<Details>>) {
                 //     val apiResponse = ModelAPIResponse(response.body() as LinkedTreeMap<String, String>)
-                if (response.code() == 200) {
-                    var userDetailsApi =response.body()
-                    store(userDetailsApi!!.first().name,
-                        userDetailsApi.first().email,
-                        userDetailsApi.first().password,
-                        userDetailsApi.first().address,
-                        userDetailsApi.first().mobile,
-                        userDetailsApi.first().image)
-                } else {
+                if(response.body()== null){
                     login_id_pwd_error_msg.visibility = View.VISIBLE
                     login_error_img.visibility = View.VISIBLE
                     vibratePhone()
+                }else {
+                    if (response.code() == 200) {
+                        var userDetailsApi = response.body()
+                        store(
+                            userDetailsApi!!.first().name,
+                            userDetailsApi.first().email,
+                            userDetailsApi.first().password,
+                            userDetailsApi.first().address,
+                            userDetailsApi.first().mobile,
+                            userDetailsApi.first().image
+                        )
+                    } else {
+                        login_id_pwd_error_msg.visibility = View.VISIBLE
+                        login_error_img.visibility = View.VISIBLE
+                        vibratePhone()
+                    }
                 }
-
             }
         })
     }

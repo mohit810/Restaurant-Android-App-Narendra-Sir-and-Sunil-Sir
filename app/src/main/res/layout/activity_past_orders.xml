@@ -17,7 +17,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/pastOrders_horizontal_guideline1"
         app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/error" />
+        app:lottie_rawRes="@raw/empty_cart" />
 
     <TextView
         android:id="@+id/pastOrders_Errortxt"
@@ -27,7 +27,7 @@
         android:textColor="@color/colorBlack"
         android:textSize="16sp"
         android:visibility="gone"
-        android:text="Seems Our Server is down. Please comeback after some time!"
+        android:text="Seems like there is no Past Order. Please comeback after placing Order!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pastOrders_lottieAnimationView"
         app:layout_constraintVertical_bias="0.1" />

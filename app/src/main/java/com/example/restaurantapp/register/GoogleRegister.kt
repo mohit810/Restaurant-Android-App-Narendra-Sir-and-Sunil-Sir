@@ -197,7 +197,7 @@ class GoogleRegister : AppCompatActivity() {
         call.enqueue(object : retrofit2.Callback<List<Details>>{
             override fun onFailure(call: Call<List<Details>>, t: Throwable) {
                 var d= t.stackTrace
-                Toast.makeText(this@GoogleRegister,d.toString() + " Sorry but Our Server is Down.",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@GoogleRegister," Sorry but Our Server is Down.",Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call<List<Details>>, response: Response<List<Details>>) {
@@ -215,7 +215,7 @@ class GoogleRegister : AppCompatActivity() {
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Will clear out your activity history stack till now
                     startActivity(i)
                 } else {
-                    Toast.makeText(this@GoogleRegister,"You already have a account",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@GoogleRegister,"You already have a Account with this Phone Number!",Toast.LENGTH_LONG).show()
                 }
 
             }

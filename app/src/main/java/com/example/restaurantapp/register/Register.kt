@@ -68,8 +68,8 @@ class Register : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     //This code must be entering before the setContentView to make the twitter login work...
-        val mTwitterAuthConfig = TwitterAuthConfig("iQQzAux5JpzQLR8rD3Zv7160x",
-            "GyWoi7rw6TL8A0IBvyDgylt7s96Iwyurg9tpqk52jKu571Hf6m")
+        val mTwitterAuthConfig = TwitterAuthConfig("9OvUwQM7Dj0KNwkUKyTOhnni8",
+            "9A4ishtJxFoVcGilCvA8FeV4lK0zhgxwSFbnwVl5fgiALO7cE8")
         val twitterConfig: TwitterConfig = TwitterConfig.Builder(this)
             .twitterAuthConfig(mTwitterAuthConfig)
             .build()
@@ -232,7 +232,7 @@ class Register : AppCompatActivity() {
         call.enqueue(object : retrofit2.Callback<List<Details>>{
             override fun onFailure(call: Call<List<Details>>, t: Throwable) {
                 var d= t.stackTrace
-                Toast.makeText(this@Register,d.toString() + " Sorry but Our Server is Down.",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@Register," Sorry but Our Server is Down.",Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call<List<Details>>, response: Response<List<Details>>) {
@@ -250,7 +250,7 @@ class Register : AppCompatActivity() {
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Will clear out your activity history stack till now
                     startActivity(i)
                 } else {
-                    Toast.makeText(this@Register,"You already have a account",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@Register,"You already have a Account with this Phone Number!",Toast.LENGTH_LONG).show()
                 }
 
             }
@@ -296,7 +296,7 @@ class Register : AppCompatActivity() {
     fun twitterlogin(){
         login_button.callback = object : Callback<TwitterSession>() {
             override fun success(result: Result<TwitterSession>) {
-                Toast.makeText(baseContext, "twitterLogin:success $result",
+                Toast.makeText(baseContext, "twitterLogin:success ",
                     Toast.LENGTH_SHORT).show()
 
                 val session = TwitterCore.getInstance().sessionManager.activeSession
@@ -305,7 +305,7 @@ class Register : AppCompatActivity() {
                 startActivity(intent)
             }
             override fun failure(exception: TwitterException) {
-                Toast.makeText(baseContext, "twitterLogin:failure $exception",
+                Toast.makeText(baseContext, "twitterLogin:failure",
                     Toast.LENGTH_SHORT).show()
             }
         }
